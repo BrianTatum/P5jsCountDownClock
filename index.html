@@ -3,11 +3,40 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Document</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
 </head>
 <body>
-	<div id='Box' style="border: 3px blue solid">
-		<h1>My Drawing</h1>
-
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<h1 class='text-center'>P5 Countdown Clock</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<div id="sketchbox"></div>
+			</div>
+			<div class="col-sm-6">
+				<div class="row">
+					<div class="col"><label for="">Years: </label><span id='years'></span></div>
+				</div>
+				<div class="row">
+					<div class="col"><label for="">Months: </label><span id='months'></span></div>
+				</div>
+				<div class="row">
+					<div class="col"><label for="">Days: </label><span id='days'></span></div>
+				</div>
+				<div class="row">
+					<div class="col"><label for="">Hours: </label><span id='hours'></span></div>
+				</div>
+				<div class="row">
+					<div class="col"><label for="">Minutes: </label><span id='minutes'></span></div>
+				</div>
+				<div class="row">
+					<div class="col"><label for="">Seconds: </label><span id='seconds'></span></div>
+				</div>
+			</div>
+		</div>
 	</div>
 </body>
 <script src='dist/bundle.js'></script>

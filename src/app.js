@@ -1,34 +1,82 @@
 import moment from 'moment';
 import P5 from 'p5';
-
-const today = moment();
-const christmas = moment('12/25/2017 12:00', 'MM-DD-YYYY HH:mm');
-const diff = moment.duration(christmas.diff(today));
-
-console.log(today.format('MMMM DD, YYYY hh:MM a'));
-console.log(christmas.format('MMMM DD, YYYY hh:mm a'));
-
-console.log(`Years: ${diff.years()}`);
-console.log(`Months: ${diff.months()}`);
-console.log(`Days: ${diff.days()}`);
-console.log(`Hours: ${diff.hours()}`);
-console.log(`Minutes: ${diff.minutes()}`);
-console.log(`Seconds: ${diff.seconds()}`);
-
-console.log(`Days in current month: ${today.daysInMonth()}`);
-console.log(`Days in Dec: ${christmas.daysInMonth()}`);
+import $ from 'jquery';
 
 const clock = new P5( (c) => {
+	let boxWidth = $('#sketchbox').width();
+	let centerPoint = boxWidth / 2
+	let radius = boxWidth / 4;
+	let arcDiff = boxWidth * 0.12;
+	let stroke = arcDiff * 0.4;
+
 	c.setup = () => {
-		c.createCanvas(500,500);
-		c.background(0);
+		c.createCanvas(boxWidth,boxWidth);
+		c.angleMode(c.DEGREES);
+	}
+
+	c.windowResized = () => {
+		boxWidth = $('#sketchbox').width();
+		centerPoint = boxWidth / 2
+		radius = boxWidth / 4;
+		arcDiff = boxWidth * 0.12;
+		stroke = arcDiff * 0.4;
+		c.resizeCanvas(boxWidth, boxWidth);
 	}
 
 	c.draw = () => {
-		c.stroke(255);
-		c.ellipse(250, 250, 100, 100);
-		c.textSize(32);
-		c.fill(255);
-		c.text(`Days: ${diff.days()}`, 25, 25);
+		let timeLeft = checkTimediff();
+		c.background(0);
+		c.noFill();
+		c.strokeWeight(stroke);
+
+		//Seconds Arc: Full Red Circle.
+		c.stroke(255, 0, 0);
+		let secArc = c.map(timeLeft.Seconds, 1, 60, 1, 360) - 90;
+		c.arc(centerPoint, centerPoint, radius, radius, -90, secArc);
+
+		//Minutes Arc: Green.
+		c.stroke(0, 153, 0);
+		let minArc = c.map(timeLeft.Minutes, 1, 60, 1, 360) - 90;
+		c.arc(centerPoint, centerPoint, radius+arcDiff, radius+arcDiff, -90, minArc);
+
+		//Hours Arc: Yellow.
+		c.stroke(255, 255, 0);
+		let hourArc = c.map(timeLeft.Hours, 1, 22, 1, 360) -90;
+		c.arc(centerPoint, centerPoint, radius+(arcDiff*2), radius+(arcDiff*2), -90, hourArc);
+
+		//Days Arc: Blue.
+		c.stroke(0, 0, 255);
+		let dayArc = c.map(timeLeft.Days, 1, 31, 1 , 360 ) - 90;
+		c.arc(centerPoint, centerPoint, radius+(arcDiff*3), radius+(arcDiff*3), -90, dayArc);
+
+		//Months Arc: Orange
+		c.stroke(255, 102, 0);
+		let monthArc = c.map(timeLeft.Months, 1, 12, 1, 360) -90;
+		c.arc(centerPoint, centerPoint, radius+(arcDiff*4), radius+(arcDiff*4), -90, monthArc);
+
+		//Outside Circle: Pink
+		c.stroke (255, 0, 102);
+		c.ellipse(centerPoint, centerPoint, radius+(arcDiff*5), radius+(arcDiff*5));
+
+		//Text Countdown.
+		$('#years').html(timeLeft.Years);
+		$('#months').html(timeLeft.Months);
+		$('#days').html(`${timeLeft.Days}  ${dayArc}`);
+		$('#hours').html(timeLeft.Hours);
+		$('#minutes').html(timeLeft.Minutes);
+		$('#seconds').html(timeLeft.Seconds);
 	}
-}, 'Box');
+	const checkTimediff = () => {
+		const today = moment();
+		const christmas = moment('12/25/2017 12:00', 'MM-DD-YYYY HH:mm');
+		const diff = moment.duration(christmas.diff(today));
+		return {
+			Years: diff.years(),
+			Months: diff.months(),
+			Days: diff.days(),
+			Hours: diff.hours(),
+			Minutes: diff.minutes(),
+			Seconds: diff.seconds()
+		}
+	}
+}, 'sketchbox');
