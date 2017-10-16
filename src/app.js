@@ -30,29 +30,66 @@ const clock = new P5( (c) => {
 		c.strokeWeight(stroke);
 
 		//Seconds Arc: Full Red Circle.
-		c.stroke(255, 0, 0);
-		let secArc = c.map(timeLeft.Seconds, 1, 60, 1, 360) - 90;
-		c.arc(centerPoint, centerPoint, radius, radius, -90, secArc);
+		if (timeLeft.Seconds > 0) {
+			c.stroke(255, 0, 0);
+			let secArc = c.map(timeLeft.Seconds, 1, 60, 1, 360) - 90;
+			c.arc(centerPoint, centerPoint, radius, radius, -90, secArc);
+		} else if (timeLeft.Munites > 0 || timeLeft.Hours > 0 || timeLeft.Days > 0 || timeLeft.Months > 0) {
+			c.stroke(255, 0, 0);
+			c.ellipse(centerPoint, centerPoint, radius, radius);
+		} else {
+			c.stroke(255, 0, 102);
+			c.ellipse(centerPoint, centerPoint, radius, radius);
+		}
 
 		//Minutes Arc: Green.
-		c.stroke(0, 153, 0);
-		let minArc = c.map(timeLeft.Minutes, 1, 60, 1, 360) - 90;
-		c.arc(centerPoint, centerPoint, radius+arcDiff, radius+arcDiff, -90, minArc);
+		if (timeLeft.Minutes > 0) {
+			c.stroke(0, 153, 0);
+			let minArc = c.map(timeLeft.Minutes, 1, 60, 1, 360) - 90;
+			c.arc(centerPoint, centerPoint, radius + arcDiff, radius + arcDiff, -90, minArc);
+		} else if (timeLeft.Hours > 0 || timeLeft.Days > 0 || timeLeft.Months > 0) {
+			c.stroke(0, 153, 0);
+			c.ellipse(centerPoint, centerPoint, radius + arcDiff)
+		} else {
+			c.stroke(255, 0, 102);
+			c.ellipse(centerPoint, centerPoint, radius + arcDiff);
+		}
 
 		//Hours Arc: Yellow.
-		c.stroke(255, 255, 0);
-		let hourArc = c.map(timeLeft.Hours, 1, 22, 1, 360) -90;
-		c.arc(centerPoint, centerPoint, radius+(arcDiff*2), radius+(arcDiff*2), -90, hourArc);
+		if (timeLeft.Hours > 0) {
+			c.stroke(255, 255, 0);
+			let hourArc = c.map(timeLeft.Hours, 1, 24, 1, 360) -90;
+			c.arc(centerPoint, centerPoint, radius + (arcDiff * 2), radius + (arcDiff * 2), -90, hourArc);
+		} else if (timeLeft.Days > 0 || timeLeft.Months > 0) {
+			c.stroke(255, 255, 0);
+			c.ellipse(centerPoint, centerPoint, radius+(arcDiff*2));
+		} else {
+			c.stroke(255, 0, 102);
+			c.ellipse(centerPoint, centerPoint, radius + (arcDiff * 2));
+		}
 
 		//Days Arc: Blue.
-		c.stroke(0, 0, 255);
-		let dayArc = c.map(timeLeft.Days, 1, 31, 1 , 360 ) - 90;
-		c.arc(centerPoint, centerPoint, radius+(arcDiff*3), radius+(arcDiff*3), -90, dayArc);
+		if (timeLeft.Days > 0) {
+			c.stroke(0, 0, 255);
+			let dayArc = c.map(timeLeft.Days, 1, 31, 1 , 360 ) - 90;
+			c.arc(centerPoint, centerPoint, radius + (arcDiff * 3), radius + (arcDiff * 3), -90, dayArc);
+		} else if (timeLeft.Months > 0) {
+			c.stroke(0 , 0, 255);
+			c.ellipse(centerPoint, centerPoint, radius + (arcDiff * 3));
+		} else {
+			c.stroke(255, 0, 102);
+			c.ellipse(centerPoint, centerPoint, radius + (arcDiff * 3));
+		}
 
 		//Months Arc: Orange
-		c.stroke(255, 102, 0);
-		let monthArc = c.map(timeLeft.Months, 1, 12, 1, 360) -90;
-		c.arc(centerPoint, centerPoint, radius+(arcDiff*4), radius+(arcDiff*4), -90, monthArc);
+		if (timeLeft.Months > 0) {
+			c.stroke(255, 102, 0);
+			let monthArc = c.map(timeLeft.Months, 1, 12, 1, 360) -90;
+			c.arc(centerPoint, centerPoint, radius+(arcDiff*4), radius+(arcDiff*4), -90, monthArc);
+		} else {
+			c.stroke(255, 0, 102);
+			c.ellipse(centerPoint, centerPoint, radius + (arcDiff * 4));
+		}
 
 		//Outside Circle: Pink
 		c.stroke (255, 0, 102);
@@ -61,14 +98,14 @@ const clock = new P5( (c) => {
 		//Text Countdown.
 		$('#years').html(timeLeft.Years);
 		$('#months').html(timeLeft.Months);
-		$('#days').html(`${timeLeft.Days}  ${dayArc}`);
+		$('#days').html(timeLeft.Days);
 		$('#hours').html(timeLeft.Hours);
 		$('#minutes').html(timeLeft.Minutes);
 		$('#seconds').html(timeLeft.Seconds);
 	}
 	const checkTimediff = () => {
 		const today = moment();
-		const christmas = moment('12/25/2017 12:00', 'MM-DD-YYYY HH:mm');
+		const christmas = moment('12/15/2017 20:54', 'MM-DD-YYYY HH:mm');
 		const diff = moment.duration(christmas.diff(today));
 		return {
 			Years: diff.years(),
@@ -79,4 +116,16 @@ const clock = new P5( (c) => {
 			Seconds: diff.seconds()
 		}
 	}
+
+	const dummyTime = () => {
+		return {
+			Years: 0,
+			Months: 0,
+			Days: 0,
+			Hours: 0,
+			Minutes: 1,
+			Seconds: 1
+		}
+	}
+
 }, 'sketchbox');
