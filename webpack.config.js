@@ -1,4 +1,5 @@
 var path = require('path');
+var webpack = require('webpack');
 
 module.exports = {
 	entry: './src/app.js',
@@ -11,6 +12,7 @@ module.exports = {
 		rules: [
 			{
 				test: /\.js$/,
+				exclude: /(node_modules|bower_components)/,
 				use: [
 					{
 						loader: 'babel-loader',
@@ -21,5 +23,15 @@ module.exports = {
 				]
 			}
 		]
-	}
+	},
+	plugins: [
+		new webpack.DefinePlugin({
+	      'process.env': {
+	        'NODE_ENV': JSON.stringify('production')
+	      },
+	    }),
+		new webpack.optimize.OccurrenceOrderPlugin(),
+	    new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false, minimize: true, compress: {warnings: false} }),
+	    new webpack.LoaderOptionsPlugin({minimize: true})    
+	 ],
 };
