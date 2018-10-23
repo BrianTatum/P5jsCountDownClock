@@ -3,10 +3,24 @@ import P5 from 'p5';
 import $ from 'jquery';
 
 const clock = new P5( (c) => {
+	//Ratio for size calculations.
+	const titleFontRatio = 0.1296296296296296;
+	const timeFontRatio = 0.0462962962962963;
+	const boxHeightRatio = 0.1851851851851852;
+	const titlePointYRatio = 0.1111111111111111;
+	const timeRow1Ratio = 0.0925925925925926;
+	const timeRow2Ratio = 0.037037037037037;
+
+	//Calculations for element size and location.
 	let boxWidth = $('#sketchbox').width();
-	let boxHeight = boxWidth + 100;
+	let headingFontSize = boxWidth * titleFontRatio;
+	let timeFontSize = boxWidth * timeFontRatio;
+	let boxHeight = boxWidth + (boxWidth * boxHeightRatio);
 	let centerPointX = boxWidth / 2;
 	let centerPointY = (boxHeight / 2);
+	let titlePointY = boxWidth * titlePointYRatio;
+	let timeRow1Y = boxHeight - (boxWidth * timeRow1Ratio);
+	let timeRow2Y = boxHeight - (boxWidth * timeRow2Ratio);
 	let radius = boxWidth / 4;
 	let arcDiff = boxWidth * 0.12;
 	let stroke = arcDiff * 0.4;
@@ -18,9 +32,14 @@ const clock = new P5( (c) => {
 
 	c.windowResized = () => {
 		boxWidth = $('#sketchbox').width();
-		boxHeight = boxWidth + 100;
+		headingFontSize = boxWidth * titleFontRatio;
+		timeFontSize = boxWidth * timeFontRatio;
+		boxHeight = boxWidth + (boxWidth * boxHeightRatio);
 		centerPointX = boxWidth / 2;
 		centerPointY = (boxHeight / 2);
+		titlePointY = boxWidth * titlePointYRatio;
+		timeRow1Y = boxHeight - (boxWidth * timeRow1Ratio);
+		timeRow2Y = boxHeight - (boxWidth * timeRow2Ratio);
 		radius = boxWidth / 4;
 		arcDiff = boxWidth * 0.12;
 		stroke = arcDiff * 0.4;
@@ -32,18 +51,18 @@ const clock = new P5( (c) => {
 		c.background(0);
 		c.textAlign(c.CENTER, c.center);
 		c.textFont("Boogaloo");
-		c.textSize(50);
+		c.textSize(headingFontSize);
 		c.strokeWeight(1);
 		c.stroke(255, 0, 0);
 		c.fill(255, 0, 0);
-		c.text("Summer Camp 2019", centerPointX, 50);
+		c.text("Summer Camp 2019", centerPointX, titlePointY);
 		c.textFont("Libre Baskerville");
-		c.textSize(15);
-		c.text(`Months: ${timeLeft.Months}`, centerPointX/2, boxHeight - 50);
-		c.text(`Days: ${timeLeft.Days}`, centerPointX, boxHeight - 50);
-		c.text(`Hours: ${timeLeft.Hours}`, centerPointX + (centerPointX/2), boxHeight - 50);
-		c.text(`Minutes: ${timeLeft.Minutes}`, boxWidth * 1/3, boxHeight - 30);
-		c.text(`Seconds: ${timeLeft.Seconds}`, boxWidth * 2/3, boxHeight - 30);
+		c.textSize(timeFontSize);
+		c.text(`Months: ${timeLeft.Months}`, centerPointX/2, timeRow1Y);
+		c.text(`Days: ${timeLeft.Days}`, centerPointX, timeRow1Y);
+		c.text(`Hours: ${timeLeft.Hours}`, centerPointX + (centerPointX/2), timeRow1Y);
+		c.text(`Minutes: ${timeLeft.Minutes}`, boxWidth * 1/3, timeRow2Y);
+		c.text(`Seconds: ${timeLeft.Seconds}`, boxWidth * 2/3, timeRow2Y);
 		c.noFill();
 		c.strokeWeight(stroke);
 
@@ -120,6 +139,9 @@ const clock = new P5( (c) => {
 		$('#hours').html(timeLeft.Hours);
 		$('#minutes').html(timeLeft.Minutes);
 		$('#seconds').html(timeLeft.Seconds);
+		$('#windowWidth').html(boxWidth);
+		$('#headingFontSize').html(headingFontSize);
+		$('#timeFontSize').html(timeFontSize);
 	}
 	const checkTimediff = () => {
 		const today = moment();

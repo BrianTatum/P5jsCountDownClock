@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "build": "webpack --optimize-minimize --define process.env.NODE_ENV=production"
   },
   "author": "Brian Tatum",
   "license": "MIT",
