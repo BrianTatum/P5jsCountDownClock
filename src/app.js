@@ -3,6 +3,9 @@ import P5 from 'p5';
 import $ from 'jquery';
 
 const clock = new P5( (c) => {
+	// Summer Camp start date.
+	const summerCampStart = moment('6/13/2021 12:00', 'MM-DD-YYYY HH:mm');
+
 	//Ratio for size calculations.
 	const titleFontRatio = 0.1296296296296296;
 	const timeFontRatio = 0.0462962962962963;
@@ -55,14 +58,14 @@ const clock = new P5( (c) => {
 		c.strokeWeight(1);
 		c.stroke(255, 0, 0);
 		c.fill(255, 0, 0);
-		c.text("Summer Camp 2019", centerPointX, titlePointY);
+		c.text("Summer Camp 2021", centerPointX, titlePointY);
 		c.textFont("Libre Baskerville");
 		c.textSize(timeFontSize);
-		c.text(`Months: ${timeLeft.Months}`, centerPointX/2, timeRow1Y);
-		c.text(`Days: ${timeLeft.Days}`, centerPointX, timeRow1Y);
-		c.text(`Hours: ${timeLeft.Hours}`, centerPointX + (centerPointX/2), timeRow1Y);
-		c.text(`Minutes: ${timeLeft.Minutes}`, boxWidth * 1/3, timeRow2Y);
-		c.text(`Seconds: ${timeLeft.Seconds}`, boxWidth * 2/3, timeRow2Y);
+		c.text(`Months: ${timeLeft.Months > 0 ? timeLeft.Months : 0}`, centerPointX/2, timeRow1Y);
+		c.text(`Days: ${timeLeft.Days > 0 ? timeLeft.Days : 0}`, centerPointX, timeRow1Y);
+		c.text(`Hours: ${timeLeft.Hours > 0 ? timeLeft.Hours : 0}`, centerPointX + (centerPointX/2), timeRow1Y);
+		c.text(`Minutes: ${timeLeft.Minutes > 0 ? timeLeft.Minutes: 0}`, boxWidth * 1/3, timeRow2Y);
+		c.text(`Seconds: ${timeLeft.Seconds > 0 ? timeLeft.Seconds : 0}`, boxWidth * 2/3, timeRow2Y);
 		c.noFill();
 		c.strokeWeight(stroke);
 
@@ -75,7 +78,7 @@ const clock = new P5( (c) => {
 			c.stroke(255, 0, 0);
 			c.ellipse(centerPointX, centerPointY, radius, radius);
 		} else {
-			c.stroke(255, 0, 102);
+			c.stroke(225, 0, 102);
 			c.ellipse(centerPointX, centerPointY, radius, radius);
 		}
 
@@ -145,8 +148,7 @@ const clock = new P5( (c) => {
 	}
 	const checkTimediff = () => {
 		const today = moment();
-		const christmas = moment('6/9/2019 12:00', 'MM-DD-YYYY HH:mm');
-		const diff = moment.duration(christmas.diff(today));
+		const diff = moment.duration(summerCampStart.diff(today));
 		return {
 			Years: diff.years(),
 			Months: diff.months(),
